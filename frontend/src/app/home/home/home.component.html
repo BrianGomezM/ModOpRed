@@ -1,0 +1,33 @@
+<div class="container-fluid h-100">
+  <div class="row h-100 align-items-center mt-4">
+    <div class="col-12 text-center mb-4">
+      <h1 class="custom-title">
+        Moderando el extremismo de opiniones en una red social
+      </h1>
+    </div>
+  </div>
+  <div class="row h-100 align-items-center" *ngIf="!subido">
+    <div class="col-12 text-center mb-4">
+      <input type="file" id="archivoEntrada" (change)="abrirArchivo($event)" class="form-control-file">
+    </div>
+  </div>
+  <div class="row h-100 align-items-center" *ngIf="subido">
+    <div class="col-3 d-flex justify-content-center">
+      <button class="btn btn-primary w-100 fs-4 fw-bold" (click)="modexFB()">ModexFB</button>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <button class="btn btn-dark w-100 fs-4 fw-bold" (click)="modexV()">ModexV</button>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <button class="btn btn-success w-100 fs-4 fw-bold" (click)="modexPD()">ModexPD</button>
+    </div>
+    <div class="col-3 d-flex justify-content-center">
+      <button class="btn btn-danger w-100 fs-4 fw-bold" (click)="limpiar()">Limpiar</button>
+    </div>
+  </div>
+  <div class="row h-100 align-items-center mt-4" *ngIf="subido">
+    <div class="col-12">
+      contenido archivo
+    </div>
+  </div>
+</div>
