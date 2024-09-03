@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {ApiService} from "../../api/api.service";
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,7 @@ export class HomeComponent implements OnInit {
   public contenidoArchivo: string = '';
   public subido: boolean = false;
 
-  constructor() {
+  constructor(private apiService: ApiService) {
   }
 
   ngOnInit(): void {
@@ -51,21 +52,36 @@ export class HomeComponent implements OnInit {
     };
   }
 
-  limpiar(){
+  limpiar() {
     this.subido = false;
     this.contenidoArchivo = '';
   }
 
   modexFB() {
     console.log('fuerza bruta')
+    this.apiService.modex({algorithm: 'fb', inputData: this.contenidoArchivo}).subscribe(success => {
+      console.log('succ fb')
+    }, error => {
+      console.log('error fb')
+    })
   }
 
   modexV() {
     console.log('voraz')
+    this.apiService.modex({algorithm: 'v', inputData: this.contenidoArchivo}).subscribe(success => {
+      console.log('succ v')
+    }, error => {
+      console.log('error v')
+    })
   }
 
   modexPD() {
     console.log('dinamica')
+    this.apiService.modex({algorithm: 'pd', inputData: this.contenidoArchivo}).subscribe(success => {
+      console.log('succ pd')
+    }, error => {
+      console.log('error pd')
+    })
   }
 
 }
