@@ -1,0 +1,25 @@
+
+### 3. **Crear un archivo `.gitignore`**
+
+
+# Node.js
+node_modules/
+npm-debug.log
+
+# Angular
+frontend/node_modules/
+frontend/dist/
+
+# Backend
+backend/node_modules/
+backend/npm-debug.log
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
