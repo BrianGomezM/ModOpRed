@@ -24,7 +24,6 @@ export class HomeComponent implements OnInit {
       lector.onload = (e: any) => {
         const text = e.target.result;
         this.contenidoArchivo = this.parseTextFile(text);
-        console.log('contenido: ', this.contenidoArchivo)
       };
       lector.readAsText(archivo);
       this.subido = true;
@@ -58,7 +57,6 @@ export class HomeComponent implements OnInit {
   }
 
   modexFB() {
-    console.log('fuerza bruta')
     this.apiService.modex({algorithm: 'fb', inputData: this.contenidoArchivo}).subscribe(success => {
       console.log('succ fb')
     }, error => {
@@ -67,7 +65,6 @@ export class HomeComponent implements OnInit {
   }
 
   modexV() {
-    console.log('voraz')
     this.apiService.modex({algorithm: 'v', inputData: this.contenidoArchivo}).subscribe(success => {
       console.log('succ v')
     }, error => {
@@ -76,7 +73,6 @@ export class HomeComponent implements OnInit {
   }
 
   modexPD() {
-    console.log('dinamica')
     this.apiService.modex({algorithm: 'pd', inputData: this.contenidoArchivo}).subscribe(success => {
       console.log('succ pd')
     }, error => {

@@ -11,8 +11,8 @@ const app = express();
 const PORT = 3000;
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json({ limit: '1024mb' }));  // Aumentar el límite a 1GB
+app.use(bodyParser.urlencoded({ extended: true, limit: '1024mb' }));
 
 // Ruta para ejecutar el algoritmo seleccionado
 app.post('/api/run-algorithm', (req, res) => {
@@ -28,7 +28,6 @@ app.post('/api/run-algorithm', (req, res) => {
 
         switch (algorithm) {
             case 'fb':
-                console.log('mande a FB')
                 result = modexFB(inputData);
                 break;
             case 'v':
