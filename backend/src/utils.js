@@ -1,18 +1,12 @@
-// backend/src/utils.js
-function parseInput(data) {
-    const lines = data.trim().split('\n');
-    const n = parseInt(lines[0], 10);
-    const agents = [];
-  
-    for (let i = 1; i <= n; i++) {
-      const [opinion, receptivity] = lines[i].split(',').map(Number);
-      agents.push({ opinion, receptivity });
-    }
-  
-    const R_max = parseInt(lines[n + 1], 10);
-  
-    return { agents, R_max };
+// utils.js
+function parseInput(inputData) {
+  if (!inputData || !inputData.agentes) {
+      throw new Error('Formato de datos de entrada inválido.');
   }
-  
-  module.exports = { parseInput };
-  
+  return inputData.agentes.map(agente => ({
+      opinion: agente.opinion,
+      receptividad: agente.receptividad
+  }));
+}
+
+module.exports = { parseInput };
