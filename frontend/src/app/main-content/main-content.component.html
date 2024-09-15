@@ -19,8 +19,10 @@
           Subir Archivo
         </button>
 
-        <!-- Mostrar el nombre del archivo debajo del botón -->
-        <p *ngIf="selectedFile" style="margin-top: 10px;">Archivo seleccionado: {{ selectedFile.name }}</p>
+        <!-- Mantener un espacio reservado para el nombre del archivo -->
+        <div style="height: 20px; margin-top: 10px;">
+          <p *ngIf="selectedFile">Archivo seleccionado: {{ selectedFile.name }}</p>
+        </div>
       </div>
     </div>
 
@@ -29,7 +31,7 @@
       <p>2. Selecciona el algoritmo que deseas usar</p>
       <mat-form-field appearance="fill">
         <mat-label>Algoritmo</mat-label>
-        <mat-select>
+        <mat-select [(ngModel)]="selectedAlgorithm" (selectionChange)="onAlgorithmSelected()">
           <mat-option value="fb">Fuerza Bruta</mat-option>
           <mat-option value="pd">Dinámico</mat-option>
           <mat-option value="pv">Voraz</mat-option>
@@ -40,7 +42,7 @@
     <!-- Botón para moderar -->
     <div style="margin-right: 20px;">
       <p>3. Haz clic para moderar</p>
-      <button mat-raised-button disabled>Moderar red social</button>
+      <button mat-flat-button [disabled]="!isReadyToModerate">Moderar red social</button>
     </div>
   </div>
 </div>
