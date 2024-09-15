@@ -1,16 +1,32 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-
+import {FormsModule} from '@angular/forms';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button'; // Importar MatButtonModule
+import { MatIconModule } from '@angular/material/icon';
+interface Algoritmos {
+  value: string;
+  viewValue: string;
+}
 @Component({
   selector: 'app-main-content',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatFormFieldModule, MatSelectModule, MatInputModule, FormsModule, MatButtonModule,  // Agregar MatButtonModule
+    MatIconModule ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.css',
   
 })
+
 export class MainContentComponent {
-  selectedAlgorithm: string = '';
+  foods: Algoritmos[] = [
+    {value: 'fb-0', viewValue: 'Fuerza Bruta'},
+    {value: 'pd-1', viewValue: 'Dinámico'},
+    {value: 'pv-2', viewValue: 'Voraz'},
+  ];
+  
   selectedFile: File | null = null;
 
   // Método para seleccionar el archivo
@@ -20,21 +36,10 @@ export class MainContentComponent {
       console.log(`Archivo seleccionado: ${this.selectedFile.name}`);
     }
   }
-
-  // Método para seleccionar el algoritmo
-  selectAlgorithm(algorithm: string): void {
-    this.selectedAlgorithm = algorithm;
-    console.log(`Algoritmo seleccionado: ${this.selectedAlgorithm}`);
+  triggerFileInput() {
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
+    fileInput.click();
   }
 
-  // Método para moderar la red social
-  moderate(): void {
-    if (this.selectedFile && this.selectedAlgorithm) {
-      console.log(`Moderando con el archivo ${this.selectedFile.name} usando el algoritmo ${this.selectedAlgorithm}`);
-      
-      // Aquí podrías agregar la lógica del análisis con el archivo .txt y el algoritmo seleccionado
-    } else {
-      alert('Por favor, selecciona un archivo y un algoritmo.');
-    }
-  }
+
 }

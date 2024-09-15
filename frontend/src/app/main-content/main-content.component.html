@@ -1,22 +1,46 @@
 <div style="text-align: center; margin-top: 50px;">
-    <h2>Prueba moderar el extremismo de tu red social siguiendo los siguientes pasos</h2>
-  
+  <h2>Prueba moderar el extremismo de tu red social siguiendo los siguientes pasos</h2>
+
+  <!-- Contenedor con estilo Flexbox para alinear horizontalmente -->
+  <div style="display: flex; justify-content: center; align-items: center; gap: 50px; margin-top: 40px;">
+    
     <!-- Subir archivo -->
-    <div>
+    <div style="margin-right: 20px;">
       <p>1. Sube el archivo .txt</p>
-      <input type="file" (change)="onFileSelected($event)" accept=".txt"/>
+      <div class="upload-button">
+        <input
+          type="file"
+          id="fileInput"
+          (change)="onFileSelected($event)"
+          style="display: none"
+        />
+        <button mat-raised-button color="primary" (click)="triggerFileInput()">
+          <mat-icon>upload</mat-icon>
+          Subir Archivo
+        </button>
+
+        <!-- Mostrar el nombre del archivo debajo del botón -->
+        <p *ngIf="selectedFile" style="margin-top: 10px;">Archivo seleccionado: {{ selectedFile.name }}</p>
+      </div>
     </div>
-  
+
     <!-- Selección de algoritmo -->
-    <div style="margin-top: 20px;">
+    <div style="margin-right: 20px;">
       <p>2. Selecciona el algoritmo que deseas usar</p>
-      <button [ngClass]="{'selected': selectedAlgorithm === 'fuerza-bruta'}" (click)="selectAlgorithm('fuerza-bruta')">Fuerza Bruta</button>
-      <button [ngClass]="{'selected': selectedAlgorithm === 'algoritmo-dinamico'}" (click)="selectAlgorithm('algoritmo-dinamico')">Algoritmo Dinámico</button>
-      <button [ngClass]="{'selected': selectedAlgorithm === 'algoritmo-voraz'}" (click)="selectAlgorithm('algoritmo-voraz')">Algoritmo Voraz</button>
+      <mat-form-field appearance="fill">
+        <mat-label>Algoritmo</mat-label>
+        <mat-select>
+          <mat-option value="fb">Fuerza Bruta</mat-option>
+          <mat-option value="pd">Dinámico</mat-option>
+          <mat-option value="pv">Voraz</mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
-  
+
     <!-- Botón para moderar -->
-    <div style="margin-top: 20px;">
-      <button class="moderate-button" (click)="moderate()">Moderar Red Social</button>
+    <div style="margin-right: 20px;">
+      <p>3. Haz clic para moderar</p>
+      <button mat-raised-button disabled>Moderar red social</button>
     </div>
   </div>
+</div>
