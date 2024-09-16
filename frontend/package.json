@@ -4,7 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "serve": "serve -s dist/frontend",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
@@ -37,6 +38,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "serve": "^6.5.8",
     "typescript": "~5.5.2"
   }
 }
