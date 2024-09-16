@@ -1,20 +1,75 @@
-/* Contenedor principal */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh; /* La altura toma el 100% de la pantalla */
-    background-color: #f5f5f5; /* Color de fondo opcional */
-  }
-  
-  /* Contenido */
-  .content {
-    text-align: center;
-    background-color: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombras opcionales */
-  }
-  
+.square-button {
+  border-radius: 0 !important; /* Establece los bordes a 0 */
+  padding: 4px 16px; /* Ajusta el tamaño del botón si es necesario */
+  min-width: 200px; /* Establece un ancho mínimo para el botón */
+  text-align: center; /* Centra el texto dentro del botón */
+  height: 55px;
+}
 
-  
+/* Estilo para botones cuadrados */
+.square-button {
+  border-radius: 0; /* Elimina el redondeo */
+}
+
+
+.result-card {
+  margin: 10px;
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 8px;
+}
+
+mat-card-header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+mat-card-title {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+
+/* Asegúrate de que las tarjetas se muestren debajo del contenedor de pasos */
+.results-container {
+  margin-top: 50px;
+  text-align: center;
+}
+
+.result-card {
+  margin: 10px auto; /* Centra las tarjetas horizontalmente */
+  padding: 10px;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Añade una sombra sutil */
+}
+
+mat-card-header {
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+mat-card-title {
+  font-size: 1.25em;
+  font-weight: bold;
+}
+
+.square-button {
+  border-radius: 0; /* Quita el redondeo del botón */
+}
+.result-card {
+  margin-bottom: 20px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* Estilos para las tarjetas de resultados */
+.result-card {
+  margin: 20px auto;
+  max-width: 600px;
+}
+
+/* Estilo general para los contenedores */
+div {
+  margin-bottom: 30px;
+}

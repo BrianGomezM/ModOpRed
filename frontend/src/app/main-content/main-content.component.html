@@ -1,48 +1,101 @@
-<div style="text-align: center; margin-top: 50px;">
-  <h2>Prueba moderar el extremismo de tu red social siguiendo los siguientes pasos</h2>
-
-  <!-- Contenedor con estilo Flexbox para alinear horizontalmente -->
-  <div style="display: flex; justify-content: center; align-items: center; gap: 50px; margin-top: 40px;">
-    
-    <!-- Subir archivo -->
-    <div style="margin-right: 20px;">
-      <p>1. Sube el archivo .txt</p>
-      <div class="upload-button">
-        <input
-          type="file"
-          id="fileInput"
-          (change)="onFileSelected($event)"
-          style="display: none"
-        />
-        <button mat-raised-button color="primary" (click)="triggerFileInput()">
-          <mat-icon>upload</mat-icon>
-          Subir Archivo
-        </button>
-
-        <!-- Mantener un espacio reservado para el nombre del archivo -->
-        <div style="height: 20px; margin-top: 10px;">
-          <p *ngIf="selectedFile">Archivo seleccionado: {{ selectedFile.name }}</p>
+<div>
+  <div>
+    <h5>
+      Prueba moderar el extremismo de tu red social siguiendo los siguientes
+      pasos
+    </h5>
+    <!-- Contenedor con estilo Flexbox para alinear horizontalmente -->
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin-top: 40px;
+      "
+    >
+      <div style="margin-right: 20px">
+        <p>1. Sube el archivo</p>
+        <div class="upload-button">
+          <input
+            type="file"
+            id="fileInput"
+            (change)="onFileSelected($event)"
+            style="display: none"
+          />
+          <button
+            mat-raised-button
+            color="primary"
+            class="square-button"
+            (click)="triggerFileInput()"
+          >
+            <mat-icon>upload</mat-icon>
+            Subir Archivo
+          </button>
+          <div style="height: 20px">
+            <p *ngIf="selectedFile">
+              Archivo seleccionado: {{ selectedFile.name }}
+            </p>
+          </div>
         </div>
       </div>
+      <div>
+        <p>2. Selecciona el algoritmo</p>
+        <div class="form-field-container">
+          <mat-form-field appearance="fill">
+            <mat-label>Algoritmo</mat-label>
+            <mat-select
+              [(ngModel)]="selectedAlgorithm"
+              (selectionChange)="onAlgorithmSelected()"
+            >
+              <mat-option value="fb">Fuerza Bruta</mat-option>
+              <mat-option value="pd">Dinámico</mat-option>
+              <mat-option value="pv">Voraz</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div>
+        <p>3. Haz clic para moderar</p>
+        <button
+          mat-flat-button
+          [disabled]="!isReadyToModerate"
+          (click)="moderate()"
+          class="square-button"
+        >
+          Moderar red social
+        </button>
+      </div>
     </div>
+  </div>
 
-    <!-- Selección de algoritmo -->
-    <div style="margin-right: 20px;">
-      <p>2. Selecciona el algoritmo que deseas usar</p>
-      <mat-form-field appearance="fill">
-        <mat-label>Algoritmo</mat-label>
-        <mat-select [(ngModel)]="selectedAlgorithm" (selectionChange)="onAlgorithmSelected()">
-          <mat-option value="fb">Fuerza Bruta</mat-option>
-          <mat-option value="pd">Dinámico</mat-option>
-          <mat-option value="pv">Voraz</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
+  <!-- Resultados en tarjetas -->
+  <div style="text-align: center; margin-top: 50px">
+    <mat-card *ngFor="let item of resultado" class="result-card">
+      <mat-card-header>
+        <mat-card-title>Resultado</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <p><strong>Algoritmo:</strong> {{ item.algoritmo }}</p>
+        <p><strong>Esfuerzo Total:</strong> {{ item.esfuerzoTotal }}</p>
+        <p><strong>Extremismo:</strong> {{ item.extremismoModelaro }}</p>
+        <p><strong>Tiempo (ms):</strong> {{ item.tiempoEjecucion }}</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 
-    <!-- Botón para moderar -->
-    <div style="margin-right: 20px;">
-      <p>3. Haz clic para moderar</p>
-      <button mat-flat-button [disabled]="!isReadyToModerate">Moderar red social</button>
-    </div>
+  <!-- Lista de agentes -->
+  <div style="text-align: center; margin-top: 50px">
+    <mat-card class="result-card">
+      <mat-card-header>
+        <mat-card-title>Lista de Agentes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let agente of agentesResultado">
+            <span>{{ agente.nombre }}: {{ agente.estado }}</span>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>
