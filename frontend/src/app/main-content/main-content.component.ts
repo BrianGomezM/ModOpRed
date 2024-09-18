@@ -54,7 +54,7 @@ export class MainContentComponent {
   agentes: Agente[] = [];
   agentesResultado: { nombre: string, estado: string }[] = [];
 
-  constructor(private modexFBService: ModexFBService, private modexPDService: ModexPDService, private modexPVService: ModexPVService) { }
+  constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService) { }
 
   onFileSelected(event: any): void {
     this.selectedFile = event.target.files[0];
@@ -109,7 +109,7 @@ export class MainContentComponent {
 
         console.log(JSON.stringify(this.resultado, null, 2));
       } else if (this.selectedAlgorithm === 'pd') {
-        this.resultado = this.modexPDService.runAlgorithm(R_max, agentesData);
+        this.resultado = ModexPDService(R_max, agentesData);
         
         const combinacion = this.resultado[0]?.combinacion || "";
         const estados = combinacion.split(' - ').map((value: string) => value === '1' ? 'Sí' : 'No');
