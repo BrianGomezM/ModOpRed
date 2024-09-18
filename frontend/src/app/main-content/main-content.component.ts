@@ -53,7 +53,7 @@ export class MainContentComponent {
   resultado: any[] = [];
   agentes: Agente[] = [];
   agentesResultado: { nombre: string, estado: string }[] = [];
-
+  mostrarResultado = false;
   constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService) { }
 
   onFileSelected(event: any): void {
@@ -102,6 +102,7 @@ export class MainContentComponent {
   }
 
   moderate() {
+    this.mostrarResultado = true; 
     if (!this.selectedFile || !this.selectedAlgorithm) {
       console.log('Por favor, selecciona un archivo y un algoritmo.');
       return;

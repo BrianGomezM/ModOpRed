@@ -5,14 +5,7 @@
       pasos
     </h5>
     <!-- Contenedor con estilo Flexbox para alinear horizontalmente -->
-    <div
-      style="
-        display: flex;
-        justify-content: center;
-        gap: 50px;
-        margin-top: 40px;
-      "
-    >
+    <div style="display: flex; justify-content: center;  gap: 50px; margin-top: 20px;">
       <div style="margin-right: 20px">
         <p>1. Sube el archivo</p>
         <div class="upload-button">
@@ -68,45 +61,51 @@
       <div>
         <p>4. Descarga la información</p>
         <button
-        mat-flat-button
-        [disabled]="!resultado.length"
-        (click)="downloadFile()"
-        class="square-button"
-      >
-        Descargar archivo
-      </button>
+          mat-flat-button
+          [disabled]="!resultado.length"
+          (click)="downloadFile()"
+          class="square-button"
+        >
+          Descargar archivo
+        </button>
       </div>
     </div>
   </div>
 
   <!-- Resultados en tarjetas -->
-  <div style="text-align: center; margin-top: 50px">
-    <mat-card *ngFor="let item of resultado" class="result-card">
-      <mat-card-header>
-        <mat-card-title>Resultado</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p><strong>Algoritmo:</strong> {{ item.algoritmo }}</p>
-        <p><strong>Esfuerzo Total:</strong> {{ item.esfuerzoTotal }}</p>
-        <p><strong>Extremismo:</strong> {{ item.extremismoModelaro }}</p>
-        <p><strong>Tiempo (ms):</strong> {{ item.tiempoEjecucion }}</p>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <div style=" display: flex;  justify-content: center; gap: 50px; flex-wrap: wrap;">
+    <div style="text-align: center; width: 50%; max-width: 490px">
+      <ng-container *ngIf="mostrarResultado">
+        <mat-card *ngFor="let item of resultado" class="result-card">
+          <mat-card-header>
+            <mat-card-title>Resultado</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p><strong>Algoritmo:</strong> {{ item.algoritmo }}</p>
+            <p><strong>Esfuerzo Total:</strong> {{ item.esfuerzoTotal }}</p>
+            <p><strong>Extremismo:</strong> {{ item.extremismoModelaro }}</p>
+            <p><strong>Tiempo (ms):</strong> {{ item.tiempoEjecucion }}</p>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
 
-  <!-- Lista de agentes -->
-  <div style="text-align: center; margin-top: 50px">
-    <mat-card class="result-card">
-      <mat-card-header>
-        <mat-card-title>Lista de Agentes</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <mat-list>
-          <mat-list-item *ngFor="let agente of agentesResultado">
-            <span>{{ agente.nombre }}: {{ agente.estado }}</span>
-          </mat-list-item>
-        </mat-list>
-      </mat-card-content>
-    </mat-card>
+    <!-- Lista de agentes -->
+    <div style="text-align: center; width: 50%; max-width: 490px">
+      <ng-container *ngIf="mostrarResultado">
+        <mat-card class="result-card">
+          <mat-card-header>
+            <mat-card-title>Lista de Agentes</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <mat-list style="max-height: 400px; overflow-y: auto">
+              <mat-list-item *ngFor="let agente of agentesResultado">
+                <span>{{ agente.nombre }}: {{ agente.estado }}</span>
+              </mat-list-item>
+            </mat-list>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </div>
   </div>
 </div>
