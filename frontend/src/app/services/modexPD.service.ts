@@ -56,11 +56,12 @@ export function ModexPDService(
           ) / i;
         const modero =
           (extremismoMin[j - esfuerzoAgentes[i - 1]][i - 1] * (i - 1)) / i;
-        //1. MODERAR
+        //SI MODERA ES MENOR QUE NO MODERAR, SE ESCOGE MODERAR
         if (modero <= nomodero) {
           extremismoMin[j][i] = modero;
           moderarMatriz[j][i] = 1;
         } else {
+            //NO MODERA
           extremismoMin[j][i] = nomodero;
           moderarMatriz[j][i] = 0;
         }
@@ -71,13 +72,15 @@ export function ModexPDService(
   let esfuerzo = 0;
   let capacidad = R_MAX;
   let solucionFinal: number = extremismoMin[R_MAX][agentes.length];
+
+  
   for (let agente = agentes.length; agente >= 0; agente--) {
     // console.log('agente: ',agente, 'capacidad:', capacidad,">", 'esfuerzo:', esfuerzoAgentes[agente - 1], 'modero:', extremismoMin[capacidad][agente].modero, "<", 'noModero:', extremismoMin[capacidad][agente].noModero);
     if (agente === 0) {
       break;
     } else if (
       capacidad >= esfuerzoAgentes[agente - 1] &&
-      moderarMatriz[capacidad][agente] === 1
+      moderarMatriz[capacidad][agente] === 1 // SI EN LA MATRIZ DE SOLUCIONES HAY 1 SIGNIFICA QUE MODERO
     ) {
       resul += '1 - ';
       esfuerzo += esfuerzoAgentes[agente - 1];
