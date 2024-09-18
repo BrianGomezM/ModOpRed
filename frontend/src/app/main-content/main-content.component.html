@@ -65,6 +65,17 @@
           Moderar red social
         </button>
       </div>
+      <div>
+        <p>4. Descarga la información</p>
+        <button
+        mat-flat-button
+        [disabled]="!resultado.length"
+        (click)="downloadFile()"
+        class="square-button"
+      >
+        Descargar archivo
+      </button>
+      </div>
     </div>
   </div>
 

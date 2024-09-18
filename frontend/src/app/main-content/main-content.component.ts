@@ -60,7 +60,34 @@ export class MainContentComponent {
     this.selectedFile = event.target.files[0];
     this.checkReadyToModerate();
   }
-
+  downloadFile() {
+    if (!this.resultado.length) {
+      console.log('No hay resultados para descargar.');
+      return;
+    }
+  
+    let fileContent = `${this.resultado[0].extremismoModelaro}\n`;
+    fileContent += `${this.resultado[0].esfuerzoTotal}\n`;
+  
+    this.agentesResultado.forEach(agente => {
+      fileContent += `${agente.estado === 'Sí' ? 'mod' : 'no_mod'}\n`;
+    });
+  
+    // Crear el archivo Blob
+    const blob = new Blob([fileContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+  
+    // Crear un enlace temporal para la descarga
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'resultado_moderacion.txt';
+    document.body.appendChild(a);
+    a.click();
+  
+    // Limpiar
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
   triggerFileInput() {
     const fileInput = document.getElementById('fileInput') as HTMLInputElement;
     fileInput.click();
