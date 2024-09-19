@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: frontend
+    env: node
+    buildCommand: "npm install && npm run build"
+    startCommand: "npm start"
+    staticPublishPath: "dist/frontend"
+    port: 10000
