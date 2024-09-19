@@ -30,7 +30,7 @@ export class ModexPVService {
       extremismo: extremismoAgentes[index],
       ratio: extremismoAgentes[index] / esfuerzoAgentes[index]
     })).sort((a, b) => a.ratio - b.ratio);
-    
+    console.log(agentesOrdenados);
     // Seleccionar agentes en base al esfuerzo máximo permitido
     for (const agente of agentesOrdenados) {
       if (esfuerzoTotal + agente.esfuerzo <= R_max) {
