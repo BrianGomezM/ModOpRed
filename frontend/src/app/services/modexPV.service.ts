@@ -4,64 +4,74 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ModexPVService {
-
   // Método que ejecuta el algoritmo Voraz
-  runAlgorithm(R_max: number, agentes: { opinion: number; receptividad: number }[]): any[] {
+  runAlgorithm(
+    R_max: number,
+    agentes: { opinion: number; receptividad: number }[]
+  ): any[] {
     // Verificar si hay agentes para procesar
     if (agentes.length === 0) {
       throw new Error('No hay agentes para procesar.');
     }
 
-    const startTime = performance.now();  // Inicio del cronómetro
+    const startTime = performance.now(); // Inicio del cronómetro
     const resultado: any[] = [];
-    
+
     // Calcular el esfuerzo de moderar para cada agente
-    const esfuerzoAgentes = agentes.map(agent => 
+    const esfuerzoAgentes = agentes.map((agent) =>
       Math.ceil((1 - agent.receptividad) * Math.abs(agent.opinion))
     );
-    
-    // Calcular el impacto por esfuerzo de cada agente
+
     const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
       opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
-      impacto: (Math.abs(agent.opinion) * agent.receptividad) / esfuerzoAgentes[index], // Impacto por esfuerzo
+      impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index],
+      mod: 0, // Impacto por esfuerzo
     }));
 
     // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
-    impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto); 
+    impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
     console.log(impactoPorEsfuerzo);
     let esfuerzoTotal = 0;
     let extremismoMin = 0;
-    let combinacion = '';
+    const combinacionSeleccionada = Array(agentes.length).fill('0');
     
     // Iterar sobre los agentes ordenados por impacto
     for (const agente of impactoPorEsfuerzo) {
       if (esfuerzoTotal + agente.esfuerzo <= R_max) {
         // Si podemos moderar al agente sin exceder el R_max
-        combinacion += '1 - ';
         esfuerzoTotal += agente.esfuerzo;
+        combinacionSeleccionada[agente.index] = '1';
       } else {
         // Si no podemos moderarlo
-        combinacion += '0 - ';
         extremismoMin += Math.pow(agente.opinion, 2);
+        combinacionSeleccionada[agente.index] = '0';
       }
     }
     
+    console.log("comb", combinacionSeleccionada);
+    
+    // Convertir la combinación seleccionada en un string
+    const combinacion = combinacionSeleccionada.join(' - ');
+
     // Calcular el extremismo mínimo final
     extremismoMin = Math.sqrt(extremismoMin) / agentes.length;
 
-    const endTime = performance.now();  // Fin del cronómetro
+    const endTime = performance.now(); // Fin del cronómetro
     const executionTime = endTime - startTime;
+
+    // Almacenar el resultado final
 
     // Almacenar el resultado final
     resultado.push({
       algoritmo: 'Algoritmo Voraz',
-      combinacion: combinacion.slice(0, -3),  // Eliminar el último ' - '
+      combinacion: combinacion,  // Usar la combinación en string
       esfuerzoTotal,
       extremismoModelaro: extremismoMin,
       tiempoEjecucion: executionTime,
     });
+
 
     console.log(resultado);
     return resultado;
