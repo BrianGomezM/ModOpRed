@@ -4,62 +4,73 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ModexPVService {
-
   // Método que ejecuta el algoritmo Voraz
-  runAlgorithm(R_max: number, agentes: { opinion: number; receptividad: number }[]): any[] {
-    const startTime = performance.now();
+  runAlgorithm(
+    R_max: number,
+    agentes: { opinion: number; receptividad: number }[]
+  ): any[] {
+    // Verificar si hay agentes para procesar
+    if (agentes.length === 0) {
+      throw new Error('No hay agentes para procesar.');
+    }
+
+    const startTime = performance.now(); // Inicio del cronómetro
     const resultado: any[] = [];
-    
-    // Calcular el esfuerzo y el extremismo de cada agente
-    const esfuerzoAgentes = agentes.map(agent =>
+
+    // Calcular el esfuerzo de moderar para cada agente
+    const esfuerzoAgentes = agentes.map((agent) =>
       Math.ceil((1 - agent.receptividad) * Math.abs(agent.opinion))
     );
-    const extremismoAgentes = agentes.map(agent =>
-      Math.sqrt(agent.opinion ** 2)
-    );
 
-    // Crear un arreglo para almacenar los agentes seleccionados
-    let combinacionSeleccionada: string[] = [];
-    let esfuerzoTotal = 0;
-    let extremismoTotal = 0;
-    
-    // Ordenar los agentes por el ratio de extremismo/efuerzo de menor a mayor
-    const agentesOrdenados = agentes.map((agent, index) => ({
+    const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
+      opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
-      extremismo: extremismoAgentes[index],
-      ratio: extremismoAgentes[index] / esfuerzoAgentes[index]
-    })).sort((a, b) => a.ratio - b.ratio);
-    console.log(agentesOrdenados);
-    // Seleccionar agentes en base al esfuerzo máximo permitido
-    for (const agente of agentesOrdenados) {
+      impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index],
+      mod: 0, // Impacto por esfuerzo
+    }));
+
+    // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
+    impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
+    console.log(impactoPorEsfuerzo);
+    let esfuerzoTotal = 0;
+    let extremismoMin = 0;
+    const combinacionSeleccionada = Array(agentes.length).fill('0');
+    
+    // Iterar sobre los agentes ordenados por impacto
+    for (const agente of impactoPorEsfuerzo) {
       if (esfuerzoTotal + agente.esfuerzo <= R_max) {
-        combinacionSeleccionada.push('1');
+        // Si podemos moderar al agente sin exceder el R_max
         esfuerzoTotal += agente.esfuerzo;
-        extremismoTotal += agente.extremismo;
+        combinacionSeleccionada[agente.index] = '1';
       } else {
-        combinacionSeleccionada.push('0');
+        // Si no podemos moderarlo
+        extremismoMin += Math.pow(agente.opinion, 2);
+        combinacionSeleccionada[agente.index] = '0';
       }
     }
     
-    // Calcular extremismo final
-    const solucionFinal = extremismoTotal / combinacionSeleccionada.length;
+    console.log("comb", combinacionSeleccionada);
     
-    // Captura el tiempo de finalización de la ejecución en milisegundos
-    const endTime = performance.now();
-    // Calcula el tiempo total de ejecución
+    // Convertir la combinación seleccionada en un string
+    const combinacion = combinacionSeleccionada.join(' - ');
+
+    // Calcular el extremismo mínimo final
+    extremismoMin = Math.sqrt(extremismoMin) / agentes.length;
+
+    const endTime = performance.now(); // Fin del cronómetro
     const executionTime = endTime - startTime;
-    // Almacena el resultado en el array de resultados
+
+    // Almacenar el resultado final
     resultado.push({
-      algoritmo: 'Voraz', // Nombre del algoritmo utilizado
-      combinacion: combinacionSeleccionada.join(' - '), // La combinación seleccionada
-      esfuerzoTotal: esfuerzoTotal, // El esfuerzo total de la combinación seleccionada
-      extremismoModelaro: solucionFinal, // El extremismo final de la combinación
-      tiempoEjecucion: executionTime, // Tiempo total de ejecución en milisegundos
+      algoritmo: 'Algoritmo Voraz',
+      combinacion: combinacion,  // Usar la combinación en string
+      esfuerzoTotal,
+      extremismoModelaro: extremismoMin,
+      tiempoEjecucion: executionTime,
     });
-    // Imprime el resultado en la consola para depuración
+
     console.log(resultado);
-    // Devuelve el array de resultados
     return resultado;
   }
 }
