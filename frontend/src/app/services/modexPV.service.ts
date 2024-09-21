@@ -25,6 +25,7 @@ export class ModexPVService {
     const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
       opinion: agent.opinion,
+      opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
       impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index],
       mod: 0, // Impacto por esfuerzo
@@ -62,6 +63,8 @@ export class ModexPVService {
     const executionTime = endTime - startTime;
 
     // Almacenar el resultado final
+
+    // Almacenar el resultado final
     resultado.push({
       algoritmo: 'Algoritmo Voraz',
       combinacion: combinacion,  // Usar la combinación en string
@@ -69,6 +72,7 @@ export class ModexPVService {
       extremismoModelaro: extremismoMin,
       tiempoEjecucion: executionTime,
     });
+
 
     console.log(resultado);
     return resultado;
