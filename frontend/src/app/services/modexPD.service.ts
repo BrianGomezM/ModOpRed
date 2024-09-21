@@ -72,28 +72,30 @@ export function ModexPDService(
   let esfuerzo = 0;
   let capacidad = R_MAX;
   let solucionFinal: number = extremismoMin[R_MAX][agentes.length];
-
   
   for (let agente = agentes.length; agente >= 0; agente--) {
     // console.log('agente: ',agente, 'capacidad:', capacidad,">", 'esfuerzo:', esfuerzoAgentes[agente - 1], 'modero:', extremismoMin[capacidad][agente].modero, "<", 'noModero:', extremismoMin[capacidad][agente].noModero);
     if (agente === 0) {
       break;
-    } else if (
-      capacidad >= esfuerzoAgentes[agente - 1] &&
-      moderarMatriz[capacidad][agente] === 1 // SI EN LA MATRIZ DE SOLUCIONES HAY 1 SIGNIFICA QUE MODERO
-    ) {
-      resul += '1 - ';
-      esfuerzo += esfuerzoAgentes[agente - 1];
-      capacidad -= esfuerzoAgentes[agente - 1];
     } else {
-      resul += '0 - ';
+      if (
+        capacidad >= esfuerzoAgentes[agente - 1] &&
+        moderarMatriz[capacidad][agente] === 1 // SI EN LA MATRIZ DE SOLUCIONES HAY 1 SIGNIFICA QUE MODERO
+      ) {
+        resul += '1 - ';
+        esfuerzo += esfuerzoAgentes[agente - 1];
+        capacidad -= esfuerzoAgentes[agente - 1];
+      } else {
+        resul += '0 - ';
+      }
     }
   }
+
   const endTime = performance.now();
   const executionTime = endTime - startTime;
   resultado.push({
     algoritmo: 'Programación Dinámica',
-    combinacion: resul.slice(0, -3),
+    combinacion: (resul.slice(0, -3)).split('').reverse().join(''),
     esfuerzoTotal: esfuerzo,
     extremismoModelaro: solucionFinal,
     tiempoEjecucion: executionTime,

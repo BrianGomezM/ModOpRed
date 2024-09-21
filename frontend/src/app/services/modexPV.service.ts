@@ -25,11 +25,11 @@ export class ModexPVService {
       index,
       opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
-      impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index], // Impacto por esfuerzo
+      impacto: (Math.abs(agent.opinion) * agent.receptividad) / esfuerzoAgentes[index], // Impacto por esfuerzo
     }));
 
     // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
-    impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
+    impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto); 
     console.log(impactoPorEsfuerzo);
     let esfuerzoTotal = 0;
     let extremismoMin = 0;
