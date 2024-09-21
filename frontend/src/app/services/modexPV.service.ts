@@ -25,7 +25,6 @@ export class ModexPVService {
     const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
       opinion: agent.opinion,
-      opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
       impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index],
       mod: 0, // Impacto por esfuerzo
