@@ -26,7 +26,7 @@ export class ModexPVService {
       index,
       opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
-      impacto: Math.abs(agent.opinion) / esfuerzoAgentes[index],
+      impacto: Math.abs(Math.pow(agent.opinion, 2)) / esfuerzoAgentes[index],
       mod: 0, // Impacto por esfuerzo
     }));
 
