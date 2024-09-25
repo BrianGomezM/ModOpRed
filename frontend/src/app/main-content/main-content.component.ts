@@ -101,6 +101,7 @@ export class MainContentComponent {
       };
 
       reader.readAsText(this.selectedFile); // Lee el archivo como texto
+      this.isReadyToModerate = true; // Indica que está listo para moderar
       this.mostrarMensaje('El archivo se ha cargado con éxito.');
     }
   }
