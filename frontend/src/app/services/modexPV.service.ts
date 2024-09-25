@@ -32,7 +32,6 @@ export class ModexPVService {
 
     // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
     impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
-    console.log(impactoPorEsfuerzo);
     let esfuerzoTotal = 0;
     let extremismoMin = 0;
     const combinacionSeleccionada = Array(agentes.length).fill('0');
@@ -50,7 +49,6 @@ export class ModexPVService {
       }
     }
     
-    console.log("comb", combinacionSeleccionada);
     
     // Convertir la combinación seleccionada en un string
     const combinacion = combinacionSeleccionada.join(' - ');
@@ -72,8 +70,6 @@ export class ModexPVService {
       tiempoEjecucion: executionTime.toFixed(3),
     });
 
-
-    console.log(resultado);
     return resultado;
   }
 }

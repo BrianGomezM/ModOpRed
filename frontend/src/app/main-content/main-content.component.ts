@@ -15,6 +15,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { DatePipe } from '@angular/common';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 interface Agente {
   nombre?: string; // Nombre del agente (opcional)
   modificado?: number; // Indica si ha sido modificado (opcional)
@@ -47,6 +49,7 @@ export interface Section {
     MatTooltipModule
   ],
   templateUrl: './main-content.component.html',
+  
   styleUrl: './main-content.component.css',
 })
 export class MainContentComponent {
@@ -63,7 +66,7 @@ export class MainContentComponent {
   truncatedFileName: string = ''; // Nombre truncado del archivo
 
   // Constructor que inyecta servicios
-  constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService) { }
+  constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService, private _snackBar: MatSnackBar) { }
 
   // Maneja la selección de un archivo
   onFileSelected(event: any): void {
@@ -98,13 +101,24 @@ export class MainContentComponent {
       };
 
       reader.readAsText(this.selectedFile); // Lee el archivo como texto
+      this.mostrarMensaje('El archivo se ha cargado con éxito.');
     }
   }
+
+  mostrarMensaje(mensaje: string, esError: boolean = false) {
+    this._snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      verticalPosition: 'top',
+      horizontalPosition: 'center',
+      panelClass: esError ? 'snack-bar-error' : 'snack-bar-success'
+    });
+  }
   
+
   // Método para descargar los resultados en un archivo
   downloadFile() {
     if (!this.resultado.length) { // Verifica si hay resultados
-      console.log('No hay resultados para descargar.'); // Mensaje en consola si no hay resultados
+      this.mostrarMensaje('No hay resultados para descargar.', true); 
       return; // Sale del método
     }
   
@@ -130,6 +144,8 @@ export class MainContentComponent {
     // Limpiar
     document.body.removeChild(a); // Elimina el elemento <a> del cuerpo
     window.URL.revokeObjectURL(url); // Revoca la URL del Blob para liberar memoria
+    this.mostrarMensaje('Descarga completada con éxito.');
+
   }
 
   // Método para simular el clic en el input de archivo
@@ -165,7 +181,7 @@ export class MainContentComponent {
       const lines = text.split('\n').filter((line: string) => line.trim() !== '');
       // Verifica si el archivo tiene suficientes datos
       if (lines.length < 2) {
-        console.log('El archivo no tiene suficientes datos.');
+        this.mostrarMensaje('El archivo no tiene suficientes datos.', true);
         return;
       }
       // Obtiene el valor de R_max
@@ -183,6 +199,7 @@ export class MainContentComponent {
           nombre: `Agente ${index + 1}`,
           estado
         }));
+        this.mostrarMensaje('La moderación por fuerza bruta se ha completado con éxito.');
       } else if (this.selectedAlgorithm === 'pd') {
         this.resultado = ModexPDService(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
@@ -191,6 +208,8 @@ export class MainContentComponent {
           nombre: `Agente ${index + 1}`,
           estado
         }));
+        this.mostrarMensaje('La moderación dinámica se ha completado con éxito.');
+
       } else if (this.selectedAlgorithm === 'pv') {
         this.resultado = this.modexPVService.runAlgorithm(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
@@ -199,8 +218,10 @@ export class MainContentComponent {
           nombre: `Agente ${index + 1}`,
           estado
         }));
+        this.mostrarMensaje('La moderación voraz se ha completado con éxito.');
+
       }else {
-        console.log('Algoritmo no soportado.');
+        this.mostrarMensaje('Algoritmo no soportado.', true);
       }
     };
 

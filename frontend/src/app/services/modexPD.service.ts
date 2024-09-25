@@ -61,8 +61,6 @@ export function ModexPDService(
   }
   console.table(moderarMatriz);
   console.table(extremismoMin);
-  console.log('Matriz de soluciones: ', moderarMatriz);
-  console.log('Matriz de extremismo minimo: ', extremismoMin);
   let resul = '';
   let esfuerzo = 0;
   let capacidad = R_MAX;
@@ -95,6 +93,5 @@ export function ModexPDService(
     extremismoModelaro: solucionFinal.toFixed(3),
     tiempoEjecucion: executionTime.toFixed(3),
   });
-  console.log('Resultado: ', resultado);
   return resultado;
 }

@@ -46,8 +46,6 @@ export class ModexFBService {
       }
       // Calcular el extremismo final para la combinación actual
       const extremismo = Math.sqrt(sumaExtremismo) / agentes.length;
-
-      console.log('Combinación:', combinacion, 'Esfuerzo Total:', esfuerzoTotal, 'Extremismo:', extremismo, 'Va',(R_max >= esfuerzoTotal));
       // Actualizar el mínimo extremismo y la mejor combinación si se cumple la condición
       if (esfuerzoTotal <= R_max && extremismo < extremismoMin) {
         extremismoMin = extremismo
@@ -70,7 +68,6 @@ export class ModexFBService {
       tiempoEjecucion: executionTime.toFixed(3), // Tiempo total de ejecución en milisegundos
     });
     // Imprimir el resultado en la consola para depuración
-    console.log(resultado);
     // Devolver el resultado
     return resultado;
   }

@@ -132,3 +132,12 @@ p {
   color: red;
   font-weight: bold;
 }
+.snack-bar-success {
+  background-color: #4caf50; /* Color de fondo para mensajes de éxito */
+  color: white; /* Color de texto */
+}
+
+.snack-bar-error {
+  background-color: #f44336; /* Color de fondo para mensajes de error */
+  color: white; /* Color de texto */
+}
