@@ -14,15 +14,18 @@ import { MatCardModule } from '@angular/material/card';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatListModule } from '@angular/material/list';
 import { DatePipe } from '@angular/common';
-
+import { MatTooltipModule } from '@angular/material/tooltip';
 interface Agente {
-  nombre: string;
-  modificado: number;
+  nombre?: string; // Nombre del agente (opcional)
+  modificado?: number; // Indica si ha sido modificado (opcional)
+  opinion?: number; // Opinión del agente
+  receptividad?: number; // Receptividad del agente
 }
 
+// Define la interfaz Section para secciones con nombre y fecha de actualización
 export interface Section {
-  name: string;
-  updated: Date;
+  name: string; // Nombre de la sección
+  updated: Date; // Fecha de actualización
 }
 
 @Component({
@@ -40,92 +43,138 @@ export interface Section {
     MatCardModule,
     MatDividerModule,
     MatListModule,
-    DatePipe
+    DatePipe,
+    MatTooltipModule
   ],
   templateUrl: './main-content.component.html',
   styleUrl: './main-content.component.css',
 })
-
 export class MainContentComponent {
-  selectedFile: File | null = null;
-  selectedAlgorithm: string | null = null;
-  isReadyToModerate = false;
-  resultado: any[] = [];
-  agentes: Agente[] = [];
-  agentesResultado: { nombre: string, estado: string }[] = [];
-  mostrarResultado = false;
+  selectedFile: File | null = null; // Archivo seleccionado (inicialmente nulo)
+  selectedAlgorithm: string | null = null; // Algoritmo seleccionado (inicialmente nulo)
+  isReadyToModerate = false; // Indica si está listo para moderar
+  resultado: any[] = []; // Arreglo para almacenar el resultado del algoritmo
+  agentes: Agente[] = []; // Arreglo para almacenar los agentes
+  agentesResultado: { nombre: string, estado: string }[] = []; // Arreglo para almacenar resultados de agentes
+  mostrarResultado = false; // Indica si se deben mostrar los resultados
+  maxFileNameLength = 10; // Longitud máxima del nombre del archivo
+  numeroAgentes: number | null = null; // Número de agentes (inicialmente nulo)
+  rMax: number | null = null; // Valor máximo de R (inicialmente nulo)
+  truncatedFileName: string = ''; // Nombre truncado del archivo
+
+  // Constructor que inyecta servicios
   constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService) { }
 
+  // Maneja la selección de un archivo
   onFileSelected(event: any): void {
-    this.selectedFile = event.target.files[0];
-    this.checkReadyToModerate();
+    this.selectedFile = event.target.files[0]; // Almacena el archivo seleccionado
+
+    if (this.selectedFile) {
+      const reader = new FileReader(); // Crea un objeto FileReader
+
+      reader.onload = (e: any) => { // Al cargar el archivo
+        const text = e.target.result; // Obtiene el contenido del archivo
+        const lines = text.split('\n').filter((line: string) => line.trim() !== ''); // Divide el contenido en líneas
+
+        // Procesar número de agentes, datos de agentes y R_max
+        const numeroAgentes = parseInt(lines[0], 10); // Lee el número de agentes desde la primera línea
+        const agentesData = lines.slice(1, numeroAgentes + 1).map((line: string) => { // Procesa los datos de los agentes
+          const [opinion, receptividad] = line.split(',').map(Number); // Divide la línea en opinión y receptividad
+          return { opinion, receptividad }; // Devuelve un objeto Agente
+        });
+        const rMax = parseInt(lines[numeroAgentes + 1], 10); // Lee el valor de R_max
+
+        // Asigna los datos procesados a las propiedades de la clase
+        this.agentes = agentesData; // Almacena los datos de los agentes
+        this.rMax = rMax; // Almacena el valor de R_max
+        this.numeroAgentes = numeroAgentes; // Almacena el número de agentes
+
+        // Establecer el nombre truncado
+        this.truncatedFileName = this.selectedFile && this.selectedFile.name.length > this.maxFileNameLength 
+        ? this.selectedFile.name.substring(0, this.maxFileNameLength) + '...' // Trunca el nombre si excede el límite
+        : this.selectedFile?.name || ''; // Usa el nombre original o una cadena vacía
+
+        this.checkReadyToModerate(); // Verifica si está listo para moderar
+      };
+
+      reader.readAsText(this.selectedFile); // Lee el archivo como texto
+    }
   }
+  
+  // Método para descargar los resultados en un archivo
   downloadFile() {
-    if (!this.resultado.length) {
-      console.log('No hay resultados para descargar.');
-      return;
+    if (!this.resultado.length) { // Verifica si hay resultados
+      console.log('No hay resultados para descargar.'); // Mensaje en consola si no hay resultados
+      return; // Sale del método
     }
   
-    let fileContent = `${this.resultado[0].extremismoModelaro}\n`;
-    fileContent += `${this.resultado[0].esfuerzoTotal}\n`;
+    let fileContent = `${this.resultado[0].extremismoModelaro}\n`; // Agrega el modelo de extremismo
+    fileContent += `${this.resultado[0].esfuerzoTotal}\n`; // Agrega el esfuerzo total
   
+    // Agrega el estado de cada agente al contenido del archivo
     this.agentesResultado.forEach(agente => {
-      fileContent += `${agente.estado === 'Sí' ? 'mod' : 'no_mod'}\n`;
+      fileContent += `${agente.estado === 'Sí' ? 'mod' : 'no_mod'}\n`; // Indica si el agente fue moderado o no
     });
   
     // Crear el archivo Blob
-    const blob = new Blob([fileContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
+    const blob = new Blob([fileContent], { type: 'text/plain' }); // Crea un Blob con el contenido del archivo
+    const url = window.URL.createObjectURL(blob); // Crea una URL para el Blob
   
     // Crear un enlace temporal para la descarga
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'resultado_moderacion.txt';
-    document.body.appendChild(a);
-    a.click();
+    const a = document.createElement('a'); // Crea un elemento <a>
+    a.href = url; // Establece la URL del Blob como href
+    a.download = 'resultado_moderacion.txt'; // Establece el nombre del archivo para la descarga
+    document.body.appendChild(a); // Agrega el elemento <a> al cuerpo del documento
+    a.click(); // Simula un clic en el enlace para iniciar la descarga
   
     // Limpiar
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a); // Elimina el elemento <a> del cuerpo
+    window.URL.revokeObjectURL(url); // Revoca la URL del Blob para liberar memoria
   }
+
+  // Método para simular el clic en el input de archivo
   triggerFileInput() {
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    fileInput.click();
+    const fileInput = document.getElementById('fileInput') as HTMLInputElement; // Obtiene el input de archivo
+    fileInput.click(); // Simula un clic en el input de archivo
   }
 
+  // Método que se llama cuando se selecciona un algoritmo
   onAlgorithmSelected() {
-    this.checkReadyToModerate();
+    this.checkReadyToModerate(); // Verifica si está listo para moderar
   }
 
+  // Método que verifica si se puede moderar
   checkReadyToModerate() {
-    this.isReadyToModerate = !!this.selectedFile && !!this.selectedAlgorithm;
+    this.isReadyToModerate = !!this.selectedFile && !!this.selectedAlgorithm; // Verifica si hay un archivo y un algoritmo seleccionado
   }
 
+  // Método para moderar los datos
   moderate() {
-    this.mostrarResultado = true; 
-    if (!this.selectedFile || !this.selectedAlgorithm) {
-      console.log('Por favor, selecciona un archivo y un algoritmo.');
-      return;
+    this.mostrarResultado = true; // Establece que se deben mostrar los resultados
+    if (!this.selectedFile || !this.selectedAlgorithm) { // Verifica si hay archivo y algoritmo seleccionados
+      console.log('Por favor, selecciona un archivo y un algoritmo.'); // Mensaje en consola si falta información
+      return; // Sale del método
     }
-
+    // Obtiene el contenido del archivo
     const file = this.selectedFile;
+    // Crea un objeto FileReader
     const reader = new FileReader();
-
+    // Al cargar el archivo
     reader.onload = (e: any) => {
       const text = e.target.result;
       const lines = text.split('\n').filter((line: string) => line.trim() !== '');
-
+      // Verifica si el archivo tiene suficientes datos
       if (lines.length < 2) {
         console.log('El archivo no tiene suficientes datos.');
         return;
       }
-
+      // Obtiene el valor de R_max
       const R_max = parseInt(lines[lines.length - 1], 10);
       const agentesData = lines.slice(1, -1).map((line: string) => {
         const [opinion, receptividad] = line.split(',').map(Number);
         return { opinion, receptividad };
       });
-
+      // Ejecuta el algoritmo seleccionado
       if (this.selectedAlgorithm === 'fb') {
         this.resultado = this.modexFBService.runAlgorithm(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
@@ -134,11 +183,8 @@ export class MainContentComponent {
           nombre: `Agente ${index + 1}`,
           estado
         }));
-
-        console.log(JSON.stringify(this.resultado, null, 2));
       } else if (this.selectedAlgorithm === 'pd') {
         this.resultado = ModexPDService(R_max, agentesData);
-        
         const combinacion = this.resultado[0]?.combinacion || "";
         const estados = combinacion.split(' - ').map((value: string) => value === '1' ? 'Sí' : 'No');
         this.agentesResultado = estados.map((estado: any, index: number) => ({

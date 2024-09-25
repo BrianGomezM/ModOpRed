@@ -66,8 +66,8 @@ export class ModexFBService {
       algoritmo: 'Fuerza Bruta', // Nombre del algoritmo utilizado
       combinacion: mejorCombinacion, // La mejor combinación encontrada
       esfuerzoTotal: mejorEsfuerzo, // El esfuerzo total de la mejor combinación
-      extremismoModelaro: extremismoMin, // El extremismo mínimo encontrado
-      tiempoEjecucion: executionTime, // Tiempo total de ejecución en milisegundos
+      extremismoModelaro: extremismoMin.toFixed(3), // El extremismo mínimo encontrado
+      tiempoEjecucion: executionTime.toFixed(3), // Tiempo total de ejecución en milisegundos
     });
     // Imprimir el resultado en la consola para depuración
     console.log(resultado);

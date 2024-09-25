@@ -4,7 +4,7 @@ import { HeaderComponent } from './header/header.component';
 import { MainContentComponent } from './main-content/main-content.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatTooltipModule } from '@angular/material/tooltip'; 
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -12,7 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
     HeaderComponent,
     MainContentComponent,
     MatButtonModule,  // Add Material Button Module
-    MatIconModule   ],
+    MatIconModule, 
+    MatTooltipModule   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

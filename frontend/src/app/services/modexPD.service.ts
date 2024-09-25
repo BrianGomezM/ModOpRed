@@ -43,7 +43,8 @@ export function ModexPDService(
         extremismoMin[j][i] = modero;
         moderarMatriz[j][i] = 0;
       } else {
-        // SI EL ESFUERZO DE MODERAR AL AGENTE SI CABE DENTRO DE R_MAX SE CALCULA EL EXTREMISMO MINIMO DE MODERAR Y NO MODERAR Y SE ESCOGE EL MENOR 
+        // SI EL ESFUERZO DE MODERAR AL AGENTE SI CABE DENTRO DE R_MAX SE CALCULA EL EXTREMISMO MINIMO DE MODERAR Y NO MODERAR 
+        //Y SE ESCOGE EL MENOR 
         const nomodero =Math.sqrt(Math.pow(extremismoMin[j][i - 1] * (i - 1), 2) + Math.pow(agentes[i - 1].opinion, 2)) / i;
         const modero =(extremismoMin[j - esfuerzoAgentes[i - 1]][i - 1] * (i - 1)) / i;
         //SI MODERA ES MENOR QUE NO MODERAR, SE ESCOGE MODERAR Y SE GUARDA EN LA MATRIZ DE SOLUCIONES
@@ -58,6 +59,10 @@ export function ModexPDService(
       }
     }
   }
+  console.table(moderarMatriz);
+  console.table(extremismoMin);
+  console.log('Matriz de soluciones: ', moderarMatriz);
+  console.log('Matriz de extremismo minimo: ', extremismoMin);
   let resul = '';
   let esfuerzo = 0;
   let capacidad = R_MAX;
@@ -87,8 +92,9 @@ export function ModexPDService(
     algoritmo: 'Programación Dinámica',
     combinacion: (resul.slice(0, -3)).split('').reverse().join(''),
     esfuerzoTotal: esfuerzo,
-    extremismoModelaro: solucionFinal,
-    tiempoEjecucion: executionTime,
+    extremismoModelaro: solucionFinal.toFixed(3),
+    tiempoEjecucion: executionTime.toFixed(3),
   });
+  console.log('Resultado: ', resultado);
   return resultado;
 }

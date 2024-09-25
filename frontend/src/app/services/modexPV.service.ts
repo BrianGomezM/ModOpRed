@@ -68,8 +68,8 @@ export class ModexPVService {
       algoritmo: 'Algoritmo Voraz',
       combinacion: combinacion,  // Usar la combinación en string
       esfuerzoTotal,
-      extremismoModelaro: extremismoMin,
-      tiempoEjecucion: executionTime,
+      extremismoModelaro: extremismoMin.toFixed(3),
+      tiempoEjecucion: executionTime.toFixed(3),
     });
 
 

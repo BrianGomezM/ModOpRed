@@ -1,13 +1,27 @@
+
 .header {
-    background-color: #5B96B1;
-    padding: 5px;
-    text-align: center;
-  }
-  
-  .title {
-    color: white;
-    margin: 0;
-    font-size: 24px;
-    font-weight: bold;
-  }
-  
+  display: flex;                /* Utiliza flexbox para el layout */
+  justify-content: space-between; /* Espacia entre el título y el ícono */
+  align-items: center;         /* Centra verticalmente los elementos */
+  background-color: #5B96B1;  /* Color de fondo */
+  padding: 5px;               /* Espaciado interno */
+}
+
+.title {
+  color: white;               /* Color del texto */
+  margin: 0;                  /* Elimina el margen del título */
+  font-size: 24px;            /* Tamaño de fuente del título */
+  font-weight: bold;          /* Peso de fuente del título */
+  text-align: center;           /* Asegura que el texto esté alineado a la izquierda */
+  flex: 1;                    /* Permite que el título ocupe todo el espacio disponible */
+}
+
+.icon {
+  padding-right: 25px;        /* Espaciado interno a la derecha */
+  color: white;            
+  font-size: 40px;       
+        
+}
+
+
+

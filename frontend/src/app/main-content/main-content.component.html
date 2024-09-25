@@ -4,9 +4,8 @@
       Prueba moderar el extremismo de tu red social siguiendo los siguientes
       pasos
     </h5>
-    <!-- Contenedor con estilo Flexbox para alinear horizontalmente -->
-    <div style="display: flex; justify-content: center;  gap: 50px; margin-top: 20px;">
-      <div style="margin-right: 20px">
+    <div class="steps-container">
+      <div>
         <p>1. Sube el archivo</p>
         <div class="upload-button">
           <input
@@ -18,15 +17,15 @@
           <button
             mat-raised-button
             color="primary"
-            class="square-button"
+            class="square-button upload-button"
             (click)="triggerFileInput()"
           >
             <mat-icon>upload</mat-icon>
             Subir Archivo
           </button>
           <div style="height: 20px">
-            <p *ngIf="selectedFile">
-              Archivo seleccionado: {{ selectedFile.name }}
+            <p *ngIf="selectedFile" matTooltip="{{ selectedFile.name }}">
+              Archivo cargado: {{ truncatedFileName  }}
             </p>
           </div>
         </div>
@@ -53,8 +52,9 @@
           mat-flat-button
           [disabled]="!isReadyToModerate"
           (click)="moderate()"
-          class="square-button"
+          class="square-button moderate-button"
         >
+          <mat-icon>refresh</mat-icon>
           Moderar red social
         </button>
       </div>
@@ -64,48 +64,72 @@
           mat-flat-button
           [disabled]="!resultado.length"
           (click)="downloadFile()"
-          class="square-button"
+          class="square-button download-button"
         >
+          <mat-icon>download</mat-icon>
           Descargar archivo
         </button>
       </div>
     </div>
-  </div>
+    
+  <div class="">
+    <div class="steps-container" >
+      <div>
+        <ng-container *ngIf="isReadyToModerate">
+          <mat-card class="result-card">
+            <mat-card-header>
+              <mat-card-title>
+                Archivo cargado: {{ selectedFile?.name }}
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content style="max-height: 500px; overflow-y: auto">
+              <p><strong>Número de agentes:</strong> {{ numeroAgentes }}</p>
+              <p><strong>Rmax:</strong> {{ rMax }}</p>
+              <p><strong>Lista de agentes:</strong></p>
 
-  <!-- Resultados en tarjetas -->
-  <div style=" display: flex;  justify-content: center; gap: 50px; flex-wrap: wrap;">
-    <div style="text-align: center; width: 50%; max-width: 490px">
-      <ng-container *ngIf="mostrarResultado">
-        <mat-card *ngFor="let item of resultado" class="result-card">
-          <mat-card-header>
-            <mat-card-title>Resultado</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p><strong>Algoritmo:</strong> {{ item.algoritmo }}</p>
-            <p><strong>Esfuerzo Total:</strong> {{ item.esfuerzoTotal }}</p>
-            <p><strong>Extremismo:</strong> {{ item.extremismoModelaro }}</p>
-            <p><strong>Tiempo (ms):</strong> {{ item.tiempoEjecucion }}</p>
-          </mat-card-content>
-        </mat-card>
-      </ng-container>
-    </div>
+              <p *ngFor="let agente of agentes; let i = index">
+                <strong>Agente {{ i + 1 }}:</strong><br> Opinión:
+                {{ agente.opinion }}, Receptividad: {{ agente.receptividad }}
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+      </div>
+      <div>
+        <ng-container *ngIf="mostrarResultado">
+          <mat-card *ngFor="let item of resultado" class="result-card">
+            <mat-card-header>
+              <mat-card-title>Resultado</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <p><strong>Algoritmo:</strong> {{ item.algoritmo }}</p>
+              <p><strong>Esfuerzo Total:</strong> {{ item.esfuerzoTotal }}</p>
+              <p><strong>Extremismo:</strong> {{ item.extremismoModelaro }}</p>
+              <p><strong>Tiempo (ms):</strong> {{ item.tiempoEjecucion }}</p>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
 
-    <!-- Lista de agentes -->
-    <div style="text-align: center; width: 50%; max-width: 490px">
-      <ng-container *ngIf="mostrarResultado">
-        <mat-card class="result-card">
-          <mat-card-header>
-            <mat-card-title>Lista de Agentes</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <mat-list style="max-height: 400px; overflow-y: auto">
-              <mat-list-item *ngFor="let agente of agentesResultado">
-                <span>{{ agente.nombre }}: {{ agente.estado }}</span>
-              </mat-list-item>
-            </mat-list>
-          </mat-card-content>
-        </mat-card>
-      </ng-container>
+        <ng-container *ngIf="mostrarResultado">
+          <mat-card class="result-card">
+            <mat-card-header>
+              <mat-card-title>Lista de Agentes</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <mat-list style="max-height: 257px; overflow-y: auto">
+                <mat-list-item *ngFor="let agente of agentesResultado">
+                  <span>
+                    <strong>{{ agente.nombre }}</strong>: 
+                    <span [ngClass]="agente.estado === 'Sí' ? 'estado-si' : 'estado-no'">
+                      {{ agente.estado }}
+                    </span>
+                  </span>                  
+                </mat-list-item>
+              </mat-list>
+            </mat-card-content>
+          </mat-card>
+        </ng-container>
+      </div>
     </div>
   </div>
 </div>
