@@ -157,12 +157,12 @@ export class MainContentComponent {
 
   // Método que se llama cuando se selecciona un algoritmo
   onAlgorithmSelected() {
+    this.mostrarMensaje('Algoritmo seleccionado.');
     this.checkReadyToModerate(); // Verifica si está listo para moderar
   }
 
   // Método que verifica si se puede moderar
   checkReadyToModerate() {
-    this.isReadyToModerate = !!this.selectedFile && !!this.selectedAlgorithm; // Verifica si hay un archivo y un algoritmo seleccionado
   }
 
   // Método para moderar los datos
