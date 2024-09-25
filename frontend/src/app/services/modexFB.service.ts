@@ -21,6 +21,7 @@ export class ModexFBService {
     const numCombinaciones = 2 ** agentes.length;
     // Inicializar el valor mínimo de extremismo con Infinity para encontrar el mínimo durante la ejecución
     let extremismoMin = Infinity;
+    let nagentes = 0;
     // Variables para almacenar la mejor combinación y el mejor esfuerzo
     let mejorCombinacion: any = null;
     let mejorEsfuerzo: any = null;
@@ -32,13 +33,14 @@ export class ModexFBService {
       // Inicializar el total de esfuerzo y la suma del extremismo
       let esfuerzoTotal = 0;
       let sumaExtremismo = 0;
-
+      let nAgentesValidos = 0;
       // Iterar sobre los agentes para calcular el esfuerzo total y el extremismo
       for (let j = 0; j < agentes.length; j++) {
         const { opinion, receptividad } = agentes[j];
         if (combinacion[j] === 1) {
           // Calcular el esfuerzo para la combinación actual
           esfuerzoTotal += Math.ceil((1 - receptividad) * Math.abs(opinion));
+          nAgentesValidos += 1;
         } else {
           // Calcular el extremismo para los agentes no seleccionados
           sumaExtremismo += opinion ** 2;
@@ -47,7 +49,7 @@ export class ModexFBService {
       // Calcular el extremismo final para la combinación actual
       const extremismo = Math.sqrt(sumaExtremismo) / agentes.length;
       // Actualizar el mínimo extremismo y la mejor combinación si se cumple la condición
-      if (esfuerzoTotal <= R_max && extremismo < extremismoMin) {
+      if (esfuerzoTotal <= R_max && extremismo <= extremismoMin && nAgentesValidos > nagentes) {
         extremismoMin = extremismo
       
         mejorCombinacion = combinacion.join(' - ');
