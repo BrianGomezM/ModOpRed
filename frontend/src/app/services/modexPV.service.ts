@@ -17,24 +17,25 @@ export class ModexPVService {
     const esfuerzoAgentes = agentes.map((agent) =>
       Math.ceil((1 - agent.receptividad) * Math.abs(agent.opinion))
     );
-
+    console.log(esfuerzoAgentes);
     const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
       opinion: agent.opinion,
       esfuerzo: esfuerzoAgentes[index],
-      impacto: Math.abs(Math.pow(agent.opinion, 2)) / esfuerzoAgentes[index],
+      impacto: esfuerzoAgentes[index] === 0  ? 0 : Math.abs(Math.pow(agent.opinion, 2)) / esfuerzoAgentes[index], // Evita la división por 0
       mod: 0, // Impacto por esfuerzo
     }));
     
+    console.log(impactoPorEsfuerzo);
     // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
     impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
     let esfuerzoTotal = 0;
     let extremismoMin = 0;
     const combinacionSeleccionada = Array(agentes.length).fill('0');
-    
+    console.log(impactoPorEsfuerzo);
     // Iterar sobre los agentes ordenados por impacto
     for (const agente of impactoPorEsfuerzo) {
-      if (esfuerzoTotal + agente.esfuerzo <= R_max) {
+      if ((esfuerzoTotal + agente.esfuerzo) <= R_max) {
         // Si podemos moderar al agente sin exceder el R_max
         esfuerzoTotal += agente.esfuerzo;
         combinacionSeleccionada[agente.index] = '1';
