@@ -66,7 +66,7 @@ export class MainContentComponent {
   truncatedFileName: string = ''; // Nombre truncado del archivo
 
   // Constructor que inyecta servicios
-  constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService, private _snackBar: MatSnackBar) { }
+  constructor(private modexFBService: ModexFBService, private modexPVService: ModexPVService, private modexPDService: ModexPDService, private _snackBar: MatSnackBar) { }
 
   // Maneja la selección de un archivo
   onFileSelected(event: any): void {
@@ -193,7 +193,7 @@ export class MainContentComponent {
       });
       // Ejecuta el algoritmo seleccionado
       if (this.selectedAlgorithm === 'fb') {
-        this.resultado = this.modexFBService.runAlgorithm(R_max, agentesData);
+        this.resultado = this.modexFBService.rocFB(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
         const estados = combinacion.split(' - ').map((value: string) => value === '1' ? 'Sí' : 'No');
         this.agentesResultado = estados.map((estado: any, index: number) => ({
@@ -202,7 +202,7 @@ export class MainContentComponent {
         }));
         this.mostrarMensaje('La moderación por fuerza bruta se ha completado con éxito.');
       } else if (this.selectedAlgorithm === 'pd') {
-        this.resultado = ModexPDService(R_max, agentesData);
+        this.resultado = this.modexPDService.rocPD(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
         const estados = combinacion.split(' - ').map((value: string) => value === '1' ? 'Sí' : 'No');
         this.agentesResultado = estados.map((estado: any, index: number) => ({
@@ -212,7 +212,7 @@ export class MainContentComponent {
         this.mostrarMensaje('La moderación dinámica se ha completado con éxito.');
 
       } else if (this.selectedAlgorithm === 'pv') {
-        this.resultado = this.modexPVService.runAlgorithm(R_max, agentesData);
+        this.resultado = this.modexPVService.rocV(R_max, agentesData);
         const combinacion = this.resultado[0]?.combinacion || "";
         const estados = combinacion.split(' - ').map((value: string) => value === '1' ? 'Sí' : 'No');
         this.agentesResultado = estados.map((estado: any, index: number) => ({

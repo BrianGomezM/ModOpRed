@@ -5,9 +5,8 @@ import { Injectable } from '@angular/core';
   providedIn: 'root', // Este servicio está disponible en toda la aplicación
 })
 export class ModexFBService {
-
   // Método que ejecuta el algoritmo de Fuerza Bruta
-  runAlgorithm(R_max: number, agentes: { opinion: number; receptividad: number }[]): any[] {
+  rocFB(R_max: number, agentes: { opinion: number; receptividad: number }[]): any[] {
     // Verificar si la lista de agentes está vacía
     if (agentes.length === 0) {
       throw new Error('No hay agentes para procesar.'); // Lanza un error si no hay agentes
