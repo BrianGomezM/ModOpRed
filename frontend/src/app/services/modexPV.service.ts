@@ -4,11 +4,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class ModexPVService {
-  // Método que ejecuta el algoritmo Voraz
-  runAlgorithm(
-    R_max: number,
-    agentes: { opinion: number; receptividad: number }[]
-  ): any[] {
+  rocV( R_max: number, agentes: { opinion: number; receptividad: number }[]): any[] {
     // Verificar si hay agentes para procesar
     if (agentes.length === 0) {
       throw new Error('No hay agentes para procesar.');
@@ -29,7 +25,7 @@ export class ModexPVService {
       impacto: Math.abs(Math.pow(agent.opinion, 2)) / esfuerzoAgentes[index],
       mod: 0, // Impacto por esfuerzo
     }));
-
+    
     // Ordenar los agentes por mayor impacto por esfuerzo (estrategia voraz)
     impactoPorEsfuerzo.sort((a, b) => b.impacto - a.impacto);
     let esfuerzoTotal = 0;
