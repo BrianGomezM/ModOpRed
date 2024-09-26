@@ -19,9 +19,10 @@ export class ModexPVService {
 
     // Calcular el esfuerzo de moderar para cada agente
     const esfuerzoAgentes = agentes.map((agent) =>
-      Math.ceil((1 - agent.receptividad) * Math.abs(agent.opinion))
+      Math.ceil(Math.abs ((1 - agent.receptividad) * Math.abs(agent.opinion)))
     );
-
+    console.log("agentes", agentes);
+console.log("esfuerzo",esfuerzoAgentes)
     const impactoPorEsfuerzo = agentes.map((agent, index) => ({
       index,
       opinion: agent.opinion,
@@ -35,7 +36,7 @@ export class ModexPVService {
     let esfuerzoTotal = 0;
     let extremismoMin = 0;
     const combinacionSeleccionada = Array(agentes.length).fill('0');
-    
+    console.log(impactoPorEsfuerzo)
     // Iterar sobre los agentes ordenados por impacto
     for (const agente of impactoPorEsfuerzo) {
       if (esfuerzoTotal + agente.esfuerzo <= R_max) {
@@ -48,8 +49,8 @@ export class ModexPVService {
         combinacionSeleccionada[agente.index] = '0';
       }
     }
-    
-    
+
+
     // Convertir la combinación seleccionada en un string
     const combinacion = combinacionSeleccionada.join(' - ');
 
